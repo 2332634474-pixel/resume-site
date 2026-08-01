@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>麦业辉 — 个人简历</title>
+<style>
+/* ===== CSS Variables ===== */
+:root {
+  --bg: #f5f4f1;
+  --bg-card: #ffffff;
+  --text: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --text-muted: #aeaeb2;
+  --accent: #cc7850;
+  --accent-hover: #b86842;
+  --accent-light: #f5ebe3;
+  --accent-glow: rgba(204,120,80,0.08);
+  --border: #e5e5e5;
+  --border-light: #f0f0f0;
+  --nav-bg: rgba(245,244,241,0.72);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --radius-full: 9999px;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --transition-fast: 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-spring: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ===== Mouse Glow ===== */
+.mouse-glow {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: opacity 0.6s ease;
+  will-change: left, top;
+}
+
+/* ===== Floating Geometry ===== */
+.floating-shapes { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+
+.floating-shapes .shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.04;
+  will-change: transform;
+}
+
+.shape-1 {
+  width: 420px; height: 420px;
+  border: 2px solid var(--accent);
+  top: 12%; left: -8%;
+  animation: floatSlow 18s ease-in-out infinite;
+}
+
+.shape-2 {
+  width: 280px; height: 280px;
+  background: var(--accent);
+  bottom: 18%; right: -6%;
+  animation: floatSlow 22s ease-in-out infinite reverse;
+}
+
+.shape-3 {
+  width: 180px; height: 180px;
+  border: 2px solid var(--accent);
+  top: 55%; left: 60%;
+  animation: floatSlow 14s ease-in-out infinite 3s;
+  opacity: 0.03;
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(30px, -20px) rotate(3deg); }
+  50% { transform: translate(-15px, 25px) rotate(-2deg); }
+  75% { transform: translate(-25px, -10px) rotate(1deg); }
+}
+
+/* ===== Navigation Bar ===== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: var(--nav-bg);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.nav.scrolled {
+  border-bottom-color: rgba(0,0,0,0.06);
+  background: rgba(245,244,241,0.88);
+}
+
+.nav-inner {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+}
+
+.nav-tabs { display: flex; gap: 4px; }
+
+.nav-tab {
+  background: none; border: none;
+  font-family: var(--font); font-size: 0.9rem; font-weight: 500;
+  color: var(--text-secondary);
+  padding: 8px 18px; border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: color var(--transition-fast), background var(--transition-fast);
+  position: relative;
+  white-space: nowrap;
+}
+
+.nav-tab:hover { color: var(--text); background: rgba(0,0,0,0.04); }
+
+.nav-tab.active { color: var(--accent); background: var(--accent-light); }
+
+.nav-tab-indicator {
+  display: none;
+}
+
+.btn-pdf {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--text); color: #fff;
+  border: none; border-radius: var(--radius-full);
+  padding: 8px 18px; font-size: 0.84rem; font-weight: 550;
+  font-family: var(--font); cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.btn-pdf:hover { background: #333; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+.btn-pdf:active { transform: scale(0.97); }
+
+.btn-pdf-icon { font-size: 0.95rem; }
+
+/* ===== Main Content ===== */
+.main {
+  position: relative; z-index: 1;
+  max-width: 780px; margin: 0 auto;
+  padding: 80px 24px 64px;
+}
+
+/* ===== Tab Panels ===== */
+.tab-panel {
+  display: none;
+  animation: panelFadeIn 0.45s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+.tab-panel.active { display: block; }
+
+@keyframes panelFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Hero (关于 Tab) ===== */
+.hero {
+  text-align: center;
+  padding: 40px 0 32px;
+}
+
+.hero-avatar {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  margin: 0 auto 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; font-weight: 700; color: var(--accent);
+  user-select: none;
+}
+
+.hero-name {
+  font-size: 2.5rem; font-weight: 700;
+  letter-spacing: 0.02em; margin-bottom: 10px;
+}
+
+.hero-title-wrap { display: flex; align-items: center; justify-content: center; gap: 4px; }
+
+.hero-title {
+  font-size: 1.15rem; font-weight: 500; color: var(--accent);
+  letter-spacing: 0.03em; min-height: 1.6em;
+}
+
+.typewriter-cursor {
+  display: inline-block; width: 2px; height: 1.1em;
+  background: var(--accent);
+  animation: cursorBlink 0.8s step-end infinite;
+  vertical-align: text-bottom; margin-left: 1px;
+}
+
+@keyframes cursorBlink {
+  50% { opacity: 0; }
+}
+
+.hero-meta {
+  display: flex; justify-content: center; flex-wrap: wrap;
+  gap: 6px 28px; font-size: 0.9rem; color: var(--text-secondary);
+  margin-top: 18px;
+}
+
+.hero-meta span { display: inline-flex; align-items: center; gap: 8px; }
+
+.hero-meta .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); opacity: 0.5; flex-shrink: 0; }
+
+/* ===== Section ===== */
+.section { margin-bottom: 36px; }
+
+.section-label {
+  font-size: 0.78rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--accent); margin-bottom: 14px;
+}
+
+.section-title {
+  font-size: 1.35rem; font-weight: 700; letter-spacing: 0.01em;
+  margin-bottom: 16px; color: var(--text);
+}
+
+/* ===== Cards ===== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 24px 28px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-smooth), transform var(--transition-smooth), border-color var(--transition-smooth);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: transparent;
+}
+
+.card + .card { margin-top: 14px; }
+
+.card-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+}
+
+.card-title { font-size: 1.05rem; font-weight: 650; color: var(--text); }
+.card-subtitle { font-size: 0.9rem; color: var(--text-secondary); }
+.card-date { font-size: 0.85rem; color: var(--text-muted); white-space: nowrap; font-weight: 500; }
+
+.card-body { color: var(--text-secondary); font-size: 0.92rem; }
+
+.card-body ul { list-style: none; padding: 0; }
+
+.card-body li {
+  position: relative; padding-left: 16px; margin-bottom: 7px;
+}
+
+.card-body li::before {
+  content: ''; position: absolute; left: 0; top: 9px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent); opacity: 0.5;
+}
+
+.card-body li:last-child { margin-bottom: 0; }
+
+/* highlight pulse for tag filtering */
+.card.highlight {
+  animation: highlightPulse 1.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(204,120,80,0.1);
+}
+
+@keyframes highlightPulse {
+  0% { box-shadow: 0 0 0 0 rgba(204,120,80,0.25); }
+  60% { box-shadow: 0 0 0 8px rgba(204,120,80,0.06); }
+  100% { box-shadow: 0 0 0 0 rgba(204,120,80,0); }
+}
+
+/* ===== Summary ===== */
+.summary-text { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.9; }
+
+.summary-text em {
+  font-style: normal; font-weight: 650; color: var(--text);
+  background: linear-gradient(180deg, transparent 58%, var(--accent-light) 58%);
+  padding: 0 2px;
+}
+
+/* ===== Timeline ===== */
+.timeline { position: relative; padding-left: 22px; }
+
+.timeline::before {
+  content: ''; position: absolute; left: 8px; top: 6px; bottom: 6px;
+  width: 1px; background: var(--border);
+}
+
+.timeline-item {
+  position: relative; padding-left: 14px; margin-bottom: 28px;
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(0.25, 0.1, 0.25, 1), transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.timeline-item:last-child { margin-bottom: 0; }
+
+.timeline-item.visible { opacity: 1; transform: translateY(0); }
+
+.timeline-item::before {
+  content: ''; position: absolute; left: -18px; top: 8px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--accent); opacity: 0.4;
+  border: 2px solid var(--bg);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.timeline-item.visible::before {
+  opacity: 0.7; transform: scale(1.3);
+}
+
+/* ===== Skills ===== */
+.skill-block { margin-bottom: 18px; }
+.skill-block:last-child { margin-bottom: 0; }
+
+.skill-label {
+  font-size: 0.83rem; font-weight: 600; color: var(--text);
+  margin-bottom: 8px;
+}
+
+.tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.tag {
+  display: inline-flex; align-items: center; padding: 6px 16px;
+  border-radius: var(--radius-full); font-size: 0.85rem; font-weight: 500;
+  background: var(--accent-light); color: var(--accent);
+  border: 1.5px solid transparent; cursor: pointer; user-select: none;
+  transition: all var(--transition-fast);
+}
+
+.tag:hover { background: #eed9cb; transform: translateY(-1px); }
+
+.tag:active { transform: scale(0.96); }
+
+.tag.selected {
+  background: var(--accent); color: #fff;
+  border-color: var(--accent);
+}
+
+.tag-filter-hint {
+  display: none;
+  font-size: 0.82rem; color: var(--accent);
+  margin-top: 14px; padding: 10px 16px;
+  background: var(--accent-light); border-radius: var(--radius-sm);
+  animation: panelFadeIn 0.3s ease both;
+}
+
+.tag-filter-hint.show { display: block; }
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center; padding: 40px 0 16px;
+  color: var(--text-muted); font-size: 0.82rem;
+}
+
+.footer-line { display: block; width: 24px; height: 2px; background: var(--border); border-radius: 1px; margin: 0 auto 14px; }
+
+/* ===== Print ===== */
+@media print {
+  .nav, .mouse-glow, .floating-shapes, .btn-pdf, .footer, .tag-filter-hint { display: none !important; }
+  body { background: #fff; }
+  .main { padding-top: 20px; }
+  .tab-panel { display: block !important; opacity: 1 !important; transform: none !important; animation: none !important; margin-bottom: 24px; }
+  .tab-panel:not(.active) { display: none !important; }
+  .card { box-shadow: none; border-color: #e0e0e0; break-inside: avoid; page-break-inside: avoid; }
+  .card:hover { transform: none; box-shadow: none; }
+  .timeline-item { opacity: 1 !important; transform: none !important; }
+  .hero { padding-top: 0; }
+  .hero-name { font-size: 1.6rem; }
+  @page { margin: 1.5cm; }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+  .main { padding: 72px 16px 48px; }
+  .hero { padding: 20px 0 24px; }
+  .hero-name { font-size: 2rem; }
+  .hero-meta { font-size: 0.8rem; gap: 4px 16px; }
+  .card { padding: 18px 20px; }
+  .card-header { flex-direction: column; }
+  .nav-inner { padding: 0 12px; height: 48px; }
+  .nav-tab { font-size: 0.8rem; padding: 6px 12px; }
+  .btn-pdf { font-size: 0.76rem; padding: 6px 14px; }
+  .mouse-glow { width: 300px; height: 300px; }
+  .floating-shapes .shape { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Mouse Glow -->
+<div class="mouse-glow" id="mouseGlow" aria-hidden="true"></div>
+
+<!-- Floating Shapes -->
+<div class="floating-shapes" aria-hidden="true">
+  <div class="shape shape-1"></div>
+  <div class="shape shape-2"></div>
+  <div class="shape shape-3"></div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <div class="nav-tabs" id="navTabs">
+      <button class="nav-tab active" data-tab="about">关于</button>
+      <button class="nav-tab" data-tab="experience">经历</button>
+      <button class="nav-tab" data-tab="projects">项目</button>
+      <button class="nav-tab" data-tab="skills">技能</button>
+    </div>
+    <button class="btn-pdf" id="btnPdf" title="下载 PDF 简历">
+      <span class="btn-pdf-icon">↓</span> PDF
+    </button>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="main" id="main">
+
+  <!-- ===== Tab: 关于 ===== -->
+  <section class="tab-panel active" id="panel-about">
+    <div class="hero">
+      <div class="hero-avatar">麦</div>
+      <h1 class="hero-name">麦业辉</h1>
+      <div class="hero-title-wrap">
+        <span class="hero-title" id="typewriterTarget"></span>
+        <span class="typewriter-cursor" id="typewriterCursor"></span>
+      </div>
+      <div class="hero-meta">
+        <span><span class="dot"></span>男 · 23岁</span>
+        <span><span class="dot"></span>16608934150</span>
+        <span><span class="dot"></span>yehuimai2@gmail.com</span>
+        <span><span class="dot"></span>1年工作经验</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">个人优势</div>
+      <div class="card">
+        <div class="summary-text">
+          <p>具备较强的<em>学习能力和跨领域适应能力</em>，本科主修医学检验，但持续关注互联网、AI 及数字产品的发展，能够快速学习新工具并应用于实际工作。</p>
+          <p style="margin-top:10px">具备较好的<em>用户洞察和商业意识</em>。曾独立运营闲鱼店铺，负责选品、内容创作、商品拍摄、客服及售后，并通过小红书持续发布原创内容获取自然流量，形成完整的运营闭环，<em>好评率 98%</em>。</p>
+          <p style="margin-top:10px">善于<em>沟通与建立信任关系</em>。在礼品零售行业工作期间，入职第二个月销售业绩进入门店前三，半年内晋升预选副店长，具备良好的执行能力、团队协作能力及结果导向意识。</p>
+          <p style="margin-top:10px">持续学习并使用 <em>ChatGPT、Claude 等 AI 工具</em>提升工作效率，希望长期向互联网产品运营、AI 产品运营方向发展。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">教育经历</div>
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">长沙医学院</div>
+            <div class="card-subtitle">本科 · 医学检验技术</div>
+          </div>
+          <div class="card-date">2021 — 2025</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Tab: 经历 ===== -->
+  <section class="tab-panel" id="panel-experience">
+    <div class="section" style="margin-top:16px;">
+      <div class="section-label">工作经历</div>
+      <div class="timeline">
+        <div class="timeline-item" data-animate>
+          <div class="card" data-highlight-tags="sales">
+            <div class="card-header">
+              <div>
+                <div class="card-title">长沙微缤贸易有限公司</div>
+                <div class="card-subtitle">销售专员</div>
+              </div>
+              <div class="card-date">2025.08 — 2026.03</div>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li>入职第二个月销售业绩进入门店前三，半年内晋升预选副店长</li>
+                <li>根据用户需求提供个性化商品推荐，提高成交率与购物体验</li>
+                <li>协助门店陈列优化、库存管理及新品推广</li>
+                <li>参与门店运营及新人带教，积累团队协作和管理经验</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">实习经历</div>
+      <div class="timeline">
+        <div class="timeline-item" data-animate>
+          <div class="card" data-highlight-tags="management">
+            <div class="card-header">
+              <div>
+                <div class="card-title">长沙市第四医院</div>
+                <div class="card-subtitle">检验科实习生组长</div>
+              </div>
+              <div class="card-date">2024.06 — 2025.04</div>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li>担任实习生组长，负责管理组员和日常排班</li>
+                <li>负责样本检测、质量控制、数据记录、仪器维护，熟悉标准化流程</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Tab: 项目 ===== -->
+  <section class="tab-panel" id="panel-projects">
+    <div class="section" style="margin-top:16px;">
+      <div class="section-label">项目经历</div>
+      <div class="card" data-highlight-tags="ecommerce content">
+        <div class="card-header">
+          <div>
+            <div class="card-title">个人电商运营项目（闲鱼）</div>
+            <div class="card-subtitle">独立运营</div>
+          </div>
+          <div class="card-date">至今</div>
+        </div>
+        <div class="card-body">
+          <ul>
+            <li>独立负责选品、拍摄、详情页制作、客服及售后全流程</li>
+            <li>通过小红书原创内容引流，持续优化商品展示及转化</li>
+            <li>好评率 98%，形成稳定复购</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Tab: 技能 ===== -->
+  <section class="tab-panel" id="panel-skills">
+    <div class="section" style="margin-top:16px;">
+      <div class="section-label">专业技能</div>
+      <div class="card">
+        <div class="skill-block">
+          <div class="skill-label">AI 工具</div>
+          <div class="tag-row">
+            <button class="tag" data-filter="ai">ChatGPT</button>
+            <button class="tag" data-filter="ai">Claude</button>
+            <button class="tag" data-filter="ai">Gemini</button>
+          </div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-label">办公软件</div>
+          <div class="tag-row">
+            <button class="tag" data-filter="office">Word</button>
+            <button class="tag" data-filter="office">Excel</button>
+            <button class="tag" data-filter="office">PowerPoint</button>
+          </div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-label">内容运营</div>
+          <div class="tag-row">
+            <button class="tag" data-filter="content">小红书</button>
+            <button class="tag" data-filter="ecommerce">闲鱼</button>
+          </div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-label">语言能力</div>
+          <div class="tag-row">
+            <button class="tag" data-filter="language">CET-4</button>
+          </div>
+        </div>
+      </div>
+      <div class="tag-filter-hint" id="tagFilterHint"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-line"></span>
+    <p>感谢您花时间阅读 · 期待与您交流</p>
+  </footer>
+</main>
+
+<script>
+(function() {
+  'use strict';
+
+  // ==================== DOM refs ====================
+  const nav = document.getElementById('nav');
+  const navTabs = document.getElementById('navTabs');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+  const mouseGlow = document.getElementById('mouseGlow');
+  const btnPdf = document.getElementById('btnPdf');
+  const typewriterTarget = document.getElementById('typewriterTarget');
+  const typewriterCursor = document.getElementById('typewriterCursor');
+  const tagFilterHint = document.getElementById('tagFilterHint');
+  const allTags = document.querySelectorAll('.tag[data-filter]');
+
+  // ==================== State ====================
+  let currentTab = 'about';
+  let typewriterDone = false;
+  let mouseX = -1000, mouseY = -1000;
+  let glowX = -1000, glowY = -1000;
+
+  // ==================== Mouse Glow ====================
+  document.addEventListener('mousemove', function(e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function updateGlow() {
+    glowX += (mouseX - glowX) * 0.06;
+    glowY += (mouseY - glowY) * 0.06;
+    mouseGlow.style.left = glowX + 'px';
+    mouseGlow.style.top = glowY + 'px';
+
+    // hide glow when mouse hasn't moved for a while (off screen)
+    if (mouseX < -500) {
+      mouseGlow.style.opacity = '0';
+    } else {
+      mouseGlow.style.opacity = '1';
+    }
+    requestAnimationFrame(updateGlow);
+  }
+  requestAnimationFrame(updateGlow);
+
+  // hide glow on touch devices
+  if ('ontouchstart' in window) {
+    mouseGlow.style.display = 'none';
+  }
+
+  // ==================== Nav Scroll Effect ====================
+  function onScroll() {
+    if (window.scrollY > 10) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // ==================== Tab Switching ====================
+  function switchTab(tabName, pushState) {
+    if (currentTab === tabName) return;
+    currentTab = tabName;
+
+    // update nav tabs
+    navTabs.querySelectorAll('.nav-tab').forEach(function(btn) {
+      btn.classList.toggle('active', btn.dataset.tab === tabName);
+    });
+
+    // update panels with animation
+    tabPanels.forEach(function(panel) {
+      var isTarget = panel.id === 'panel-' + tabName;
+      if (isTarget) {
+        panel.classList.add('active');
+        // re-trigger animation
+        panel.style.animation = 'none';
+        panel.offsetHeight;
+        panel.style.animation = '';
+      } else {
+        panel.classList.remove('active');
+      }
+    });
+
+    // clear tag filter when switching
+    clearTagFilter();
+
+    // typewriter on about tab
+    if (tabName === 'about' && !typewriterDone) {
+      startTypewriter();
+    }
+
+    // re-observe timeline items on experience tab
+    if (tabName === 'experience') {
+      setTimeout(reobserveTimeline, 100);
+    }
+
+    // scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // update URL hash
+    if (pushState !== false) {
+      history.pushState(null, null, '#' + tabName);
+    }
+  }
+
+  navTabs.addEventListener('click', function(e) {
+    var btn = e.target.closest('.nav-tab');
+    if (!btn) return;
+    switchTab(btn.dataset.tab);
+  });
+
+  // ==================== PDF Download ====================
+  btnPdf.addEventListener('click', function() {
+    // briefly switch all panels visible for printing
+    var allPanels = document.querySelectorAll('.tab-panel');
+    var wasActive = [];
+    allPanels.forEach(function(p) {
+      wasActive.push(p.classList.contains('active'));
+      p.classList.add('active');
+    });
+
+    window.print();
+
+    // restore
+    allPanels.forEach(function(p, i) {
+      if (!wasActive[i]) p.classList.remove('active');
+    });
+  });
+
+  // ==================== Typewriter Effect ====================
+  function startTypewriter() {
+    if (typewriterDone) return;
+    var text = 'AI 软件销售';
+    var i = 0;
+    typewriterTarget.textContent = '';
+    typewriterCursor.style.display = 'inline-block';
+
+    function type() {
+      if (i < text.length) {
+        typewriterTarget.textContent += text.charAt(i);
+        i++;
+        setTimeout(type, 90 + Math.random() * 50);
+      } else {
+        typewriterDone = true;
+        // keep cursor blinking, fade out after a while
+        setTimeout(function() {
+          typewriterCursor.style.opacity = '0';
+          typewriterCursor.style.transition = 'opacity 1s ease';
+        }, 3000);
+      }
+    }
+    type();
+  }
+
+  // start on load if about tab is active
+  if (currentTab === 'about') startTypewriter();
+
+  // ==================== Timeline Animation ====================
+  var timelineObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        timelineObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
+
+  function observeTimeline() {
+    document.querySelectorAll('.timeline-item[data-animate]:not(.visible)').forEach(function(item) {
+      timelineObserver.observe(item);
+    });
+  }
+
+  function reobserveTimeline() {
+    document.querySelectorAll('.timeline-item[data-animate]').forEach(function(item) {
+      item.classList.remove('visible');
+      timelineObserver.unobserve(item);
+      timelineObserver.observe(item);
+    });
+  }
+
+  observeTimeline();
+
+  // ==================== Tag Filtering ====================
+  var selectedFilter = null;
+
+  allTags.forEach(function(tag) {
+    tag.addEventListener('click', function() {
+      var filter = this.dataset.filter;
+
+      if (selectedFilter === filter) {
+        // deselect
+        clearTagFilter();
+        return;
+      }
+
+      // select
+      selectedFilter = filter;
+      allTags.forEach(function(t) {
+        t.classList.toggle('selected', t.dataset.filter === filter);
+      });
+
+      // check if there are highlights in other tabs
+      var highlights = document.querySelectorAll('[data-highlight-tags]');
+      var found = false;
+      highlights.forEach(function(el) {
+        var tags = el.dataset.highlightTags.split(/\s+/);
+        if (tags.indexOf(filter) !== -1) {
+          found = true;
+        }
+      });
+
+      if (found) {
+        // hint text
+        var filterNames = {
+          'ai': 'AI 工具',
+          'office': '办公软件',
+          'content': '内容运营',
+          'ecommerce': '电商运营',
+          'sales': '销售能力',
+          'management': '团队管理',
+          'language': '语言能力'
+        };
+        tagFilterHint.textContent = '已筛选：' + (filterNames[filter] || filter) + ' — 相关经历已高亮显示';
+        tagFilterHint.classList.add('show');
+
+        // highlight matching cards
+        highlights.forEach(function(el) {
+          var tags = el.dataset.highlightTags.split(/\s+/);
+          if (tags.indexOf(filter) !== -1) {
+            el.classList.add('highlight');
+            // switch to the panel containing this element
+            var panel = el.closest('.tab-panel');
+            if (panel && panel.id !== 'panel-' + currentTab) {
+              switchTab(panel.id.replace('panel-', ''), false);
+            }
+            // scroll to element
+            setTimeout(function() {
+              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 350);
+          }
+        });
+      } else {
+        tagFilterHint.textContent = '已筛选：' + (filter === 'language' ? '语言能力' : filter) + '（当前简历中无关联经历）';
+        tagFilterHint.classList.add('show');
+      }
+    });
+  });
+
+  function clearTagFilter() {
+    selectedFilter = null;
+    allTags.forEach(function(t) { t.classList.remove('selected'); });
+    document.querySelectorAll('.card.highlight').forEach(function(c) { c.classList.remove('highlight'); });
+    tagFilterHint.classList.remove('show');
+  }
+
+  // ==================== URL Hash Routing ====================
+  function handleHash() {
+    var hash = window.location.hash.replace('#', '');
+    var validTabs = ['about', 'experience', 'projects', 'skills'];
+    if (validTabs.indexOf(hash) !== -1 && hash !== currentTab) {
+      switchTab(hash, false);
+    }
+  }
+  window.addEventListener('hashchange', handleHash);
+  handleHash();
+
+})();
+</script>
+</body>
+</html>
